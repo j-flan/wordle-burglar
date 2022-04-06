@@ -1,0 +1,17 @@
+<div>
+  bad letters: <input [(ngModel)]="badLetters" (ngModelChange)="filterBadLetters()"><br>
+  bad first <input [(ngModel)]="first" (ngModelChange)="filterPosition(first, 0)"><br>
+  bad second <input [(ngModel)]="second" (ngModelChange)="filterPosition(second, 1)"><br>
+  bad third <input [(ngModel)]="third" (ngModelChange)="filterPosition(third, 2)"><br>
+  bad fourth <input [(ngModel)]="fourth" (ngModelChange)="filterPosition(fourth, 3)"><br>
+  bad fifth <input [(ngModel)]="fifth" (ngModelChange)="filterPosition(fifth, 4)">
+</div>
+<br>
+  <button (click)="reset()" >reset</button>
+<br>
+<div>
+  top {{LISTMAX}}:
+  <ul>
+    <li *ngFor="let word of top | async" >{{word}}</li>
+  </ul>
+</div>
