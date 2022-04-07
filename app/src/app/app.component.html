@@ -6,6 +6,14 @@
   bad fourth <input [(ngModel)]="fourth" (ngModelChange)="filterPosition(fourth, 3)"><br>
   bad fifth <input [(ngModel)]="fifth" (ngModelChange)="filterPosition(fifth, 4)">
 </div>
+<div>
+  known:
+  <input maxlength="1" size="1" [(ngModel)]="firstKnown" (ngModelChange)="filterKnown(firstKnown, 0)">
+  <input maxlength="1" size="1" [(ngModel)]="secondKnown" (ngModelChange)="filterKnown(secondKnown, 1)">
+  <input maxlength="1" size="1" [(ngModel)]="thirdKnown" (ngModelChange)="filterKnown(thirdKnown, 2)">
+  <input maxlength="1" size="1" [(ngModel)]="fourthKnown" (ngModelChange)="filterKnown(fourthKnown, 3)">
+  <input maxlength="1" size="1" [(ngModel)]="fifthKnown" (ngModelChange)="filterKnown(fifthKnown, 4)">
+</div>
 <br>
   <button (click)="reset()" >reset</button>
 <br>
