@@ -94,11 +94,13 @@ export class AppComponent {
     }else{
       const conflictLetter = _.filter(this.knownLetters, letter=>_.find(this.badLetters.split(''), badLetter=>badLetter==letter));
       if(conflictLetter.length){
-        this.badLetters = _.filter(this.badLetters.split(''), letter=>letter!=conflictLetter).join('');
+        console.log('conflict: ', conflictLetter);
+        this.badLetters = _.filter(this.badLetters.split(''), letter=>letter!=conflictLetter);
       }
       if(this.badLetters)
+      console.log('filter bad letters: ', this.badLetters.split(''))
         this.filteredWords = _.filter(this.filteredWords, word=>{
-            return _.find(this.badLetters.split(''), letter=>_.includes(word, letter));
+            return _.includes(word, this.badLetters[this.badLetters.length-1]);
         });
     }
     this.badLetterCache = this.badLetters
@@ -108,7 +110,7 @@ export class AppComponent {
   filterPosition(list: any, index: number){
     if(!list)return;
     this.filteredWords = _.filter(this.filteredWords, word=>{
-      return _.find(list, letter=>word[index] == letter);
+      return _.find(list, letter=>(word[index] != letter && _.includes(word, letter)));
     });
     this.getTop(this.filteredWords);
   }
