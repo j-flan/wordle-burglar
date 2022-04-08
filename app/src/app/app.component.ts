@@ -53,76 +53,91 @@ export class AppComponent {
   reset(){
     this.filteredWords = wordList;
     this.badLetters = [];
-    this.first = [];
-    this.second = [];
-    this.third = [];
-    this.fourth = [];
-    this.fifth = [];
-    this.firstKnown = '';
-    this.secondKnown = '';
-    this.thirdKnown = '';
-    this.fourthKnown = '';
-    this.fifthKnown = '';
+    _.forEach(this.unknownLetterPositions, letters=>letters = []);
+    _.forEach(this.knownLetters, letter=>letter='');
     this.getTop(wordList);
   }
+
+  //heirarchy:
+  //known
+  //not included
+  //unknownposition
+
+  filterKnown(letter: any, index: number){
+    if(!letter){
+      this.knownLetters[index] = ''
+      this.handleRemovedKnownIndex(index);
+      return;
+    }
+    this.filteredWords = _.filter(this.filteredWords, word=>word[index]==letter);
+    this.knownLetters[index] = letter;
+    this.getTop(this.filteredWords);
+  }
+  handleRemovedKnownIndex(index: number){
+    this.filteredWords = wordList
+    _.forEach(this.knownLetters, letter=>{
+      if(letter)
+        this.filteredWords = this.reFilterIndex(letter, index, this.filteredWords)
+    })
+    if(this.badLetters.length)
+      this.filterBadLetters();
+    this.scanUnkown();
+    this.getTop(this.filteredWords);
+  }
+
   filterBadLetters(){
     if(this.badLetterCache.length && this.badLetterCache.length > this.badLetters.length){
       const removedLetter: any = _.difference(this.badLetterCache.split(''), this.badLetters.split(''));
       const addWords = _.filter(wordList, word=>_.includes(word, removedLetter))
       this.filteredWords = _.concat(this.filteredWords, addWords);
+      this.scanUnkown();
     }else{
-      this.filteredWords = _.filter(this.filteredWords, word=>{
-        let letterNotIncluded: boolean = true
-          _.forEach(this.badLetters, letter=>{
-            if(_.includes(word, letter)){
-              letterNotIncluded = false;
-            }
-          })
-        return letterNotIncluded
-      });
+      const conflictLetter = _.filter(this.knownLetters, letter=>_.find(this.badLetters.split(''), badLetter=>badLetter==letter));
+      if(conflictLetter.length){
+        this.badLetters = _.filter(this.badLetters.split(''), letter=>letter!=conflictLetter).join('');
+      }
+      if(this.badLetters)
+        this.filteredWords = _.filter(this.filteredWords, word=>{
+            return _.find(this.badLetters.split(''), letter=>_.includes(word, letter));
+        });
     }
     this.badLetterCache = this.badLetters
     this.getTop(this.filteredWords);
   }
+
   filterPosition(list: any, index: number){
     if(!list)return;
     this.filteredWords = _.filter(this.filteredWords, word=>{
-        let letterNotIncluded: boolean = true
-          _.forEach(list, letter=>{
-            if(word[index] == letter){
-              letterNotIncluded = false;
-            }
-          })
-        return letterNotIncluded
-      });
+      return _.find(list, letter=>word[index] == letter);
+    });
     this.getTop(this.filteredWords);
   }
-  filterKnown(letter: any, index: number){
-    if(!letter){
-      this.handleRemovedIndex(index);
-      return;
-    }
-    this.filteredWords = _.filter(this.filteredWords, word=>word[index]==letter);
-    this.getTop(this.filteredWords);
-  }
-  reFilter(letter: any, index: number, list: any){
+
+  reFilterIndex(letter: any, index: number, list: any){
     return _.filter(list, word=>word[index]==letter);
   }
+
   getTop(allWords: any){
     const words = _.slice(allWords,0,this.LISTMAX)
     this.top.next([...words])
   }
+
   handleRemovedIndex(index: number){
     this.filteredWords = wordList
     _.forEach(this.knownLetters, letter=>{
       if(letter)
-        this.filteredWords = this.reFilter(letter, index, this.filteredWords)
+        this.filteredWords = this.reFilterIndex(letter, index, this.filteredWords)
     })
     if(this.badLetters.length)
       this.filterBadLetters();
+    this.scanUnkown()
+    this.getTop(this.filteredWords);
+  }
+
+  scanUnkown(){
     _.forEach(this.unknownLetterPositions, (letters, index)=>{
       if(letters.length) this.filterPosition(letters, index);
     })
-    this.getTop(this.filteredWords);
   }
+
 }
