@@ -1,25 +1,25 @@
-<div>
-  bad letters: <input [(ngModel)]="badLetters" (ngModelChange)="filterBadLetters()"><br>
-  bad first <input [(ngModel)]="first" (ngModelChange)="filterPosition(first, 0)"><br>
-  bad second <input [(ngModel)]="second" (ngModelChange)="filterPosition(second, 1)"><br>
-  bad third <input [(ngModel)]="third" (ngModelChange)="filterPosition(third, 2)"><br>
-  bad fourth <input [(ngModel)]="fourth" (ngModelChange)="filterPosition(fourth, 3)"><br>
-  bad fifth <input [(ngModel)]="fifth" (ngModelChange)="filterPosition(fifth, 4)">
-</div>
-<div>
-  known:
-  <input maxlength="1" size="1" [(ngModel)]="firstKnown" (ngModelChange)="filterKnown(firstKnown, 0)">
-  <input maxlength="1" size="1" [(ngModel)]="secondKnown" (ngModelChange)="filterKnown(secondKnown, 1)">
-  <input maxlength="1" size="1" [(ngModel)]="thirdKnown" (ngModelChange)="filterKnown(thirdKnown, 2)">
-  <input maxlength="1" size="1" [(ngModel)]="fourthKnown" (ngModelChange)="filterKnown(fourthKnown, 3)">
-  <input maxlength="1" size="1" [(ngModel)]="fifthKnown" (ngModelChange)="filterKnown(fifthKnown, 4)">
-</div>
-<br>
-  <button (click)="reset()" >reset</button>
-<br>
-<div>
-  top {{LISTMAX}}:
-  <ul>
-    <li *ngFor="let word of top | async" >{{word}}</li>
-  </ul>
+<div class="root">
+  <div class="no-good">
+    <div class="input-line"  size="1">garbage letters: <input [(ngModel)]="badLetters" (ngModelChange)="updateWords()"></div>
+    <div class="input-line" maxlength="4" size="1">not first <input [(ngModel)]="first" (ngModelChange)="filterKnown(first, 0)"></div>
+    <div class="input-line" maxlength="4" size="1">not second <input [(ngModel)]="second" (ngModelChange)="filterKnown(second, 1)"></div>
+    <div class="input-line" maxlength="4" size="1">not third <input [(ngModel)]="third" (ngModelChange)="filterKnown(third, 2)"></div>
+    <div class="input-line" maxlength="4" size="1">not fourth <input [(ngModel)]="fourth" (ngModelChange)="filterKnown(fourth, 3)"></div>
+    <div class="input-line" maxlength="4" size="1">not fifth <input [(ngModel)]="fifth" (ngModelChange)="filterKnown(fifth, 4)"></div>
+  </div>
+  <div class="known">
+    <input maxlength="1" size="1" [(ngModel)]="firstCorrect" (ngModelChange)="filterCorrect(firstCorrect, 0)">
+    <input maxlength="1" size="1" [(ngModel)]="secondCorrect" (ngModelChange)="filterCorrect(secondCorrect, 1)">
+    <input maxlength="1" size="1" [(ngModel)]="thirdCorrect" (ngModelChange)="filterCorrect(thirdCorrect, 2)">
+    <input maxlength="1" size="1" [(ngModel)]="fourthCorrect" (ngModelChange)="filterCorrect(fourthCorrect, 3)">
+    <input maxlength="1" size="1" [(ngModel)]="fifthCorrect" (ngModelChange)="filterCorrect(fifthCorrect, 4)">
+  </div>
+  <div class="list">
+    top {{LISTMAX}}:
+    <div class="list-box">
+      <ul >
+        <li *ngFor="let word of top | async" >{{word}}</li>
+      </ul>
+    </div>
+  </div>
 </div>

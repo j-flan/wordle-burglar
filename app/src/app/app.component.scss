@@ -1,0 +1,47 @@
+
+.root{
+display:block;
+width:100%;
+  .no-good{
+    width: 300px;
+    height: 100px;
+    .input-line{
+      position: relative;
+      height:20px;
+      margin-top:10px;
+      left: 10;
+      input{
+
+        float:right;
+      }
+    }
+  }
+  .known{
+    input{
+      font-size: 1.25em;
+      text-align: center;
+
+    }
+    height: 50px;
+    margin-top: 100px;
+    position:relative;
+    left: 10;
+  }
+  .list{
+    margin-top: 40px;
+    position: relative;
+    left: 10;
+    width: 300px;
+    .list-box{
+      height:600px;
+      overflow: auto;
+      ul{
+        position:relative;
+        right: 50;
+      }
+    }
+  }
+
+}
+
+
