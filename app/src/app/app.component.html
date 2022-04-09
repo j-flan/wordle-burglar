@@ -1,24 +1,25 @@
 <div class="root">
   <div class="no-good">
-    <div class="input-line"  size="1">garbage letters: <input [(ngModel)]="badLetters" (ngModelChange)="updateWords()"></div>
-    <div class="input-line" maxlength="4" size="1">not first <input [(ngModel)]="first" (ngModelChange)="filterKnown(first, 0)"></div>
-    <div class="input-line" maxlength="4" size="1">not second <input [(ngModel)]="second" (ngModelChange)="filterKnown(second, 1)"></div>
-    <div class="input-line" maxlength="4" size="1">not third <input [(ngModel)]="third" (ngModelChange)="filterKnown(third, 2)"></div>
-    <div class="input-line" maxlength="4" size="1">not fourth <input [(ngModel)]="fourth" (ngModelChange)="filterKnown(fourth, 3)"></div>
-    <div class="input-line" maxlength="4" size="1">not fifth <input [(ngModel)]="fifth" (ngModelChange)="filterKnown(fifth, 4)"></div>
+    <div class="input-line garbage"  size="1">garbage letters: <input [(ngModel)]="badLetters" (ngModelChange)="filterWords()"></div>
+    <div class="input-line" maxlength="4" size="1">not first <input [(ngModel)]="first" (ngModelChange)="setKnown(first, 0)"></div>
+    <div class="input-line" maxlength="4" size="1">not second <input [(ngModel)]="second" (ngModelChange)="setKnown(second, 1)"></div>
+    <div class="input-line" maxlength="4" size="1">not third <input [(ngModel)]="third" (ngModelChange)="setKnown(third, 2)"></div>
+    <div class="input-line" maxlength="4" size="1">not fourth <input [(ngModel)]="fourth" (ngModelChange)="setKnown(fourth, 3)"></div>
+    <div class="input-line" maxlength="4" size="1">not fifth <input [(ngModel)]="fifth" (ngModelChange)="setKnown(fifth, 4)"></div>
   </div>
   <div class="known">
-    <input maxlength="1" size="1" [(ngModel)]="firstCorrect" (ngModelChange)="filterCorrect(firstCorrect, 0)">
-    <input maxlength="1" size="1" [(ngModel)]="secondCorrect" (ngModelChange)="filterCorrect(secondCorrect, 1)">
-    <input maxlength="1" size="1" [(ngModel)]="thirdCorrect" (ngModelChange)="filterCorrect(thirdCorrect, 2)">
-    <input maxlength="1" size="1" [(ngModel)]="fourthCorrect" (ngModelChange)="filterCorrect(fourthCorrect, 3)">
-    <input maxlength="1" size="1" [(ngModel)]="fifthCorrect" (ngModelChange)="filterCorrect(fifthCorrect, 4)">
+    <input maxlength="1" size="1" [(ngModel)]="firstCorrect" (ngModelChange)="setCorrect(firstCorrect, 0)">
+    <input maxlength="1" size="1" [(ngModel)]="secondCorrect" (ngModelChange)="setCorrect(secondCorrect, 1)">
+    <input maxlength="1" size="1" [(ngModel)]="thirdCorrect" (ngModelChange)="setCorrect(thirdCorrect, 2)">
+    <input maxlength="1" size="1" [(ngModel)]="fourthCorrect" (ngModelChange)="setCorrect(fourthCorrect, 3)">
+    <input maxlength="1" size="1" [(ngModel)]="fifthCorrect" (ngModelChange)="setCorrect(fifthCorrect, 4)">
   </div>
   <div class="list">
-    top {{LISTMAX}}:
+    Top {{LISTMAX}}:
+    <hr>
     <div class="list-box">
       <ul >
-        <li *ngFor="let word of top | async" >{{word}}</li>
+        <li *ngFor="let word of top | async" >{{word.toUpperCase()}}</li>
       </ul>
     </div>
   </div>

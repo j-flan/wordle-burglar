@@ -1,47 +1,60 @@
-
-.root{
-display:block;
-width:100%;
-  .no-good{
+.root {
+  display: block;
+  width: 320px;
+  border-style: solid;
+  border-color: black;
+  border-width: 1px;
+  background-color:aliceblue;
+  border-radius: 5px;
+  .no-good {
     width: 300px;
     height: 100px;
-    .input-line{
+    .input-line {
       position: relative;
-      height:20px;
-      margin-top:10px;
-      left: 10;
-      input{
-
-        float:right;
+      height: 20px;
+      margin-top: 10px;
+      margin-left: 10px;
+      input {
+        float: right;
+        background-color: yellow;
+        border-radius: 5px;
+        text-transform:uppercase;
+      }
+    }
+    .garbage{
+      input {
+        float: right;
+        background-color: lightgray;
       }
     }
   }
-  .known{
-    input{
+  .known {
+    input {
       font-size: 1.25em;
       text-align: center;
-
+      background-color: yellowgreen;
+      border-radius: 5px;
+      text-transform:uppercase;
     }
     height: 50px;
     margin-top: 100px;
-    position:relative;
-    left: 10;
-  }
-  .list{
-    margin-top: 40px;
     position: relative;
-    left: 10;
+    margin-left: 10px;
+  }
+  .list {
+    margin-top: 20px;
+    position: relative;
+    margin-left: 10px;
+    margin-bottom: 10px;
     width: 300px;
-    .list-box{
-      height:600px;
+    .list-box {
+      height: 600px;
       overflow: auto;
-      ul{
-        position:relative;
+      ul {
+        position: relative;
+        list-style: none;
         right: 50;
       }
     }
   }
-
 }
-
-

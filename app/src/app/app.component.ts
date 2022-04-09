@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { BehaviorSubject, from, Subject, take } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { wordList } from './word-list';
 import * as _ from 'lodash';
 
@@ -10,17 +10,17 @@ import * as _ from 'lodash';
 })
 export class AppComponent {
   top: BehaviorSubject<any> = new BehaviorSubject([]);
-  badLetters: any = [];
-  correctLetters: any = [];
-  knownLetters: any = [];
-  filteredWords: any = [];
+  badLetters: string[] = [];
+  correctLetters: string[] = [];
+  knownLetters: string[] = [];
+  filteredWords: string[] = [];
   LISTMAX = 50;
 
-  first: any = [];
-  second: any = [];
-  third: any = [];
-  fourth: any = [];
-  fifth: any = [];
+  first: string = '';
+  second: string = '';
+  third: string = '';
+  fourth: string = '';
+  fifth: string = '';
 
   firstCorrect: string = '';
   secondCorrect: string = '';
@@ -28,25 +28,9 @@ export class AppComponent {
   fourthCorrect: string = '';
   fifthCorrect: string = '';
 
-  correctLetters$: Subject<any> = new Subject();
-  knownLetters$: Subject<any> = new Subject();
-  badLetters$: Subject<any> = new Subject();
-
-  constructor() { //public wordListService: WordListService
+  constructor() {
     this.filteredWords = wordList;
     this.getTop();
-    this.correctLetters$.subscribe({
-      next: (obj) => {
-        this.correctLetters[obj.index] = obj.letter;
-        this.updateWords();
-      },
-    });
-    this.knownLetters$.subscribe({
-      next: (obj) => {
-        this.knownLetters[obj.index] = obj.letters;
-        this.updateWords();
-      },
-    });
   }
 
   //heirarchy:
@@ -54,26 +38,60 @@ export class AppComponent {
   //known
   //unknownposition
 
-  filterCorrect(letter: any, index: number) {
-    this.correctLetters$.next({ letter, index });
+  setCorrect(letter: string, index: number) {
+    this.correctLetters[index] = letter;
+    this.filterWords();
   }
-  filterKnown(letters: any, index: number) {
-    this.knownLetters$.next({ letters, index });
+  setKnown(letters: string, index: number) {
+    this.knownLetters[index] = letters;
+    this.filterWords();
   }
 
-  updateWords() {
+  filterWords() {
     this.filteredWords = wordList;
-    this.updateBadLetters();
+    this.filterBadLetters();
+    this.removeBadFromKnown();
+    this.filterCorrectLetters();
+    this.filterKnownLetters();
+    this.getTop();
+  }
+  filterBadLetters() {
+    if (this.badLetters?.length)
+      _.forEach(this.badLetters, (letter) => {
+        if (letter){
+          if(_.find(this.correctLetters, correctLetter=>letter == correctLetter)){
+            this.badLetters = _.filter(this.badLetters, badLetter=>badLetter!=letter);
+          }else{
+            this.filteredWords = _.filter(
+              this.filteredWords,
+              (word) => !_.includes(word, letter)
+            );
+          }
+        }
+
+      });
+  }
+  removeBadFromKnown() {
+    let needsReset: boolean = false
     _.forEach(this.knownLetters, (letters, index) => {
       _.forEach(letters, (letter) => {
-        if (_.includes(this.badLetters, letter))
-          _.remove(
+        if (_.includes(this.badLetters, letter)) {
+          needsReset = true;
+          const filtered = _.filter(
             this.knownLetters[index],
-            (knownletter) => knownletter == letter
+            (knownletter) => knownletter != letter
           );
+          needsReset = true;
+          this.knownLetters[index] = filtered.join('');
+          this.setKnownModel(this.knownLetters[index], index);
+        }
       });
     });
+    if(needsReset)
+      this.filterWords();
+  }
 
+  filterCorrectLetters() {
     if (this.correctLetters?.length)
       _.forEach(this.correctLetters, (letter, index) => {
         if (letter)
@@ -82,25 +100,18 @@ export class AppComponent {
             (word) => word[index] == letter
           );
       });
-    this.updateKnownLetters();
-    this.getTop();
   }
-  updateBadLetters() {
-    if (this.badLetters?.length)
-      _.forEach(this.badLetters, (letter) => {
-        if (letter)
-          this.filteredWords = _.filter(
-            this.filteredWords,
-            (word) => !_.includes(word, letter)
-          );
-      });
-  }
-  updateKnownLetters() {
+  filterKnownLetters() {
     if (this.knownLetters?.length)
       _.forEach(this.knownLetters, (letters, index) => {
         if (letters) {
           _.forEach(letters, (letter) => {
             if (letter)
+            if(_.find(this.correctLetters, correctLetter=>letter == correctLetter)){
+              this.knownLetters[index] = _.filter(this.knownLetters[index], known=>known != letter).join('')
+              this.setKnownModel(this.knownLetters[index], index)
+            }
+            else
               this.filteredWords = _.filter(
                 this.filteredWords,
                 (word) => word[index] != letter && _.includes(word, letter)
@@ -113,5 +124,16 @@ export class AppComponent {
   getTop() {
     const words = _.slice(this.filteredWords, 0, this.LISTMAX);
     this.top.next([...words]);
+  }
+  setKnownModel(string:string, index:number){
+    index == 0
+      ? (this.first = string)
+      : index == 1
+      ? (this.second = string)
+      : index == 2
+      ? (this.third = string)
+      : index == 3
+      ? (this.fourth = string)
+      : (this.fifth = string);
   }
 }
